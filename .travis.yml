@@ -1,0 +1,30 @@
+language: python
+
+sudo: false
+
+env:
+  global:
+  - LILYPOND_VERSION=2.19.65
+
+python:
+- 3.4
+- 3.5
+- 3.6
+
+addons:
+  apt:
+    packages:
+    - graphviz
+    - imagemagick
+
+before_install:
+- wget -q http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-$LILYPOND_VERSION-1.linux-64.sh
+- sh lilypond-$LILYPOND_VERSION-1.linux-64.sh --batch
+- export PATH=/home/travis/bin:$PATH
+- pip install -U pip
+
+install:
+- pip install -e .
+
+script:
+- py.test
