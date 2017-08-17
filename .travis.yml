@@ -22,6 +22,7 @@ before_install:
 - sh lilypond-$LILYPOND_VERSION-1.linux-64.sh --batch
 - export PATH=/home/travis/bin:$PATH
 - pip install -U pip
+- pip install 'pytest=>3.0.0'
 
 install:
 - pip install -e .
