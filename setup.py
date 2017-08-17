@@ -5,7 +5,7 @@ import setuptools
 if __name__ == '__main__':
     setuptools.setup(
         install_requires=[
-            'abjad>=2.21',
+            'abjad==2.21',
             ],
         name='abjad-ext-ipython',
         namespace_packages=['abjad.ext'],
