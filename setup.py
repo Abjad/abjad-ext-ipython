@@ -8,8 +8,5 @@ if __name__ == '__main__':
             'abjad>=2.21',
             ],
         name='abjad-ext-ipython',
-        namespace_packages=['abjad.ext'],
-        packages=[
-            'abjad.ext.ipython',
-            ],
+        packages=['abjad_ext'],
         )

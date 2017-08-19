@@ -17,11 +17,11 @@ def load_ipython_extension(ipython):
     To activate the IPython notebook extension, add the following line in your
     notebook:
 
-        %load_ext abjad.ext.ipython
+        %load_ext abjad_ext.ipython
 
     '''
     import abjad
-    from abjad.ext import ipython
+    from abjad_ext import ipython
     play = ipython.Play()
     show = ipython.Show()
     graph = ipython.Graph()
