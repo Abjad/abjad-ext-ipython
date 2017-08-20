@@ -2,7 +2,7 @@ import abjad
 import pathlib
 import subprocess
 import tempfile
-from IPython.core.display import display_png
+import IPython.core.display
 
 
 class Show:
@@ -35,4 +35,4 @@ class Show:
                     file_contents = file_pointer.read()
                     pngs.append(file_contents)
         for png in pngs:
-            display_png(png, raw=True)
+            IPython.core.display.display_png(png, raw=True)

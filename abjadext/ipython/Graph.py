@@ -2,7 +2,7 @@ import abjad
 import pathlib
 import subprocess
 import tempfile
-from IPython.core.display import display_png
+import IPython.core.display
 
 
 class Graph:
@@ -69,7 +69,7 @@ class Graph:
                 raise RuntimeError(message)
             with open(str(png_path), 'rb') as file_pointer:
                 png = file_pointer.read()
-        display_png(png, raw=True)
+        IPython.core.display.display_png(png, raw=True)
 
     ### PRIVATE METHODS ###
 

@@ -3,7 +3,7 @@ import base64
 import pathlib
 import subprocess
 import tempfile
-from IPython.core.display import display_html
+import IPython.core.display
 
 
 class Play(object):
@@ -62,7 +62,7 @@ class Play(object):
         audio_tag = '<audio controls type="{}" '
         audio_tag += 'src="data:{};base64,{}">'
         audio_tag = audio_tag.format(mime_type, mime_type, encoded_audio)
-        display_html(audio_tag, raw=True)
+        IPython.core.display.display_html(audio_tag, raw=True)
 
     def _get_audio_as_base64(
         self,
