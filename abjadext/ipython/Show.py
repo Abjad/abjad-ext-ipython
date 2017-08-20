@@ -31,7 +31,8 @@ class Show:
                 command = command.format(file_path=file_path)
                 exit_code = subprocess.call(command, shell=True)
                 if exit_code:
-                    raise RuntimeError('ImageMagick failed.')
+                    message = 'ImageMagick failed: {}'.format(exit_code)
+                    raise RuntimeError(message)
                 with open(file_path, 'rb') as file_pointer:
                     file_contents = file_pointer.read()
                     pngs.append(file_contents)

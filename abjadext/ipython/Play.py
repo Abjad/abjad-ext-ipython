@@ -1,44 +1,44 @@
+import abjad
+import base64
 import os
-import shutil
 import subprocess
 import tempfile
+from IPython.core.display import display_html
 
 
 class Play(object):
-    r'''IPython replacement callable for `topleveltools.show()`.
+    """
+    IPython replacement callable for `abjad.play()`.
 
     Integrates audio rendering of Abjad MIDI files into IPython notebooks
-    using `timidity`.
-    '''
+    using `timidity`, and displays the resulting audio as an <audio> tag.
+    """
 
     ### SPECIAL METHODS ###
 
     def __call__(self, argument):
-        '''Render `argument` as audio and display it in the IPython notebook
-        as an <audio> tag.
-        '''
-        from abjad.tools import systemtools
-        from abjad.tools import topleveltools
-        assert hasattr(argument, '__illustrate__')
-        assert systemtools.IOManager.find_executable('lilypond')
-        assert systemtools.IOManager.find_executable('timidity')
+        if not abjad.IOManager.find_executable('lilypond'):
+            raise RuntimeError('Cannot find LilyPond.')
+        if not abjad.IOManager.find_executable('convert'):
+            raise RuntimeError('Cannot find ImageMagick.')
+        if not hasattr(argument, '__illustrate__'):
+            raise TypeError('Cannot play {!r}'.format(type(argument)))
         has_vorbis = self._check_for_vorbis()
-        temp_directory = tempfile.mkdtemp()
-        midi_file_path = os.path.join(temp_directory, 'out.midi')
-        result = topleveltools.persist(argument).as_midi(midi_file_path)
-        midi_file_path, format_time, render_time = result
-        if has_vorbis:
-            audio_file_path = os.path.join(temp_directory, 'out.ogg')
-        else:
-            audio_file_path = os.path.join(temp_directory, 'out.aif')
-        encoded_audio = self._get_audio_as_base64(
-            midi_file_path,
-            audio_file_path,
-            has_vorbis,
-            )
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            midi_file_path = os.path.join(temporary_directory, 'out.midi')
+            result = abjad.persist(argument).as_midi(midi_file_path)
+            midi_file_path, format_time, render_time = result
+            if has_vorbis:
+                audio_file_path = os.path.join(temporary_directory, 'out.ogg')
+            else:
+                audio_file_path = os.path.join(temporary_directory, 'out.aif')
+            encoded_audio = self._get_audio_as_base64(
+                midi_file_path,
+                audio_file_path,
+                has_vorbis,
+                )
         if encoded_audio is not None:
             self._display_audio_tag(encoded_audio, has_vorbis)
-        shutil.rmtree(temp_directory)
 
     ### PRIVATE METHODS ###
 
@@ -54,7 +54,6 @@ class Play(object):
         return has_vorbis
 
     def _display_audio_tag(self, encoded_audio, has_vorbis):
-        from IPython.core.display import display_html
         if has_vorbis:
             mime_type = 'audio/ogg'
         else:
@@ -79,19 +78,14 @@ class Play(object):
             output_flag=output_flag,
             audio_file_path=audio_file_path,
             )
-        result = subprocess.call(command, shell=True)
-        if result == 0:
-            encoded_audio = self._get_base64_from_file(audio_file_path)
-            return encoded_audio
-        message = 'timidity failed to render MIDI, result: {}'
-        message = message.format(result)
-        print(message)
-        return None
+        exit_code = subprocess.call(command, shell=True)
+        if exit_code:
+            message = 'Timidity failed: {}'.format(exit_code)
+            raise RuntimeError(message)
+        encoded_audio = self._get_base64_from_file(audio_file_path)
+        return encoded_audio
 
     def _get_base64_from_file(self, file_name):
-        '''Read the base64 representation of a file and encode for HTML.
-        '''
-        import base64
         with open(file_name, 'rb') as file_pointer:
             data = file_pointer.read()
             return base64.b64encode(data).decode('utf-8')

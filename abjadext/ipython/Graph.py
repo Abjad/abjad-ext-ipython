@@ -59,12 +59,14 @@ class Graph:
             command = command.format(layout, dot_path, pdf_path)
             exit_code = subprocess.call(command, shell=True)
             if exit_code:
-                raise RuntimeError('Graphviz failed.')
+                message = 'Graphviz failed: {}'.format(exit_code)
+                raise RuntimeError(message)
             command = 'convert {} -trim {}'
             command = command.format(pdf_path, png_path)
             exit_code = subprocess.call(command, shell=True)
             if exit_code:
-                raise RuntimeError('ImageMagick failed.')
+                message = 'ImageMagick failed: {}'.format(exit_code)
+                raise RuntimeError(message)
             abjad.IOManager.spawn_subprocess(command)
             with open(png_path, 'rb') as file_pointer:
                 png = file_pointer.read()
