@@ -1,5 +1,5 @@
 import abjad
-import os
+import pathlib
 import subprocess
 import tempfile
 from IPython.core.display import display_png
@@ -9,6 +9,18 @@ class Graph:
     """
     IPython replacement callable for `abjad.graph()`.
     """
+
+    ### CLASS VARIABLES ###
+
+    _valid_layouts = (
+        'circo',
+        'dot',
+        'fdp',
+        'neato',
+        'osage',
+        'sfdp',
+        'twopi',
+        )
 
     ### SPECIAL METHODS ###
 
@@ -34,40 +46,39 @@ class Graph:
             graphviz_format = str(graphviz_graph)
         else:
             raise TypeError('Cannot illustrate {!r}'.format(type(argument)))
-        valid_layouts = (
-            'circo',
-            'dot',
-            'fdp',
-            'neato',
-            'osage',
-            'sfdp',
-            'twopi',
-            )
-        if layout not in valid_layouts:
+        if layout not in self._valid_layouts:
             raise ValueError('Invalid layout: {}'.format(layout))
         if not abjad.IOManager.find_executable(layout):
             raise RuntimeError('Cannot find Graphviz.')
         if not abjad.IOManager.find_executable('convert'):
             raise RuntimeError('Cannot find ImageMagick.')
         with tempfile.TemporaryDirectory() as temporary_directory:
-            dot_path = os.path.join(temporary_directory, 'graph.dot')
-            pdf_path = os.path.join(temporary_directory, 'graph.pdf')
-            png_path = os.path.join(temporary_directory, 'graph.png')
-            with open(dot_path, 'w') as file_pointer:
+            temporary_directory = pathlib.Path(temporary_directory)
+            dot_path = temporary_directory / 'graph.dot'
+            pdf_path = temporary_directory / 'graph.pdf'
+            png_path = temporary_directory / 'graph.png'
+            with open(str(dot_path), 'w') as file_pointer:
                 file_pointer.write(graphviz_format)
-            command = '{} -v -Tpdf {} -o {}'
-            command = command.format(layout, dot_path, pdf_path)
-            exit_code = subprocess.call(command, shell=True)
+            exit_code = self._run_graphviz(layout, dot_path, pdf_path)
             if exit_code:
                 message = 'Graphviz failed: {}'.format(exit_code)
                 raise RuntimeError(message)
-            command = 'convert {} -trim {}'
-            command = command.format(pdf_path, png_path)
-            exit_code = subprocess.call(command, shell=True)
+            exit_code = self._run_imagemagick(pdf_path, png_path)
             if exit_code:
                 message = 'ImageMagick failed: {}'.format(exit_code)
                 raise RuntimeError(message)
-            abjad.IOManager.spawn_subprocess(command)
-            with open(png_path, 'rb') as file_pointer:
+            with open(str(png_path), 'rb') as file_pointer:
                 png = file_pointer.read()
         display_png(png, raw=True)
+
+    ### PRIVATE METHODS ###
+
+    def _run_graphviz(self, layout, dot_path, pdf_path):
+        command = '{} -v -Tpdf {} -o {}'
+        command = command.format(layout, dot_path, pdf_path)
+        return subprocess.call(command, shell=True)
+
+    def _run_imagemagick(self, pdf_path, png_path):
+        command = 'convert {} -trim {}'
+        command = command.format(pdf_path, png_path)
+        return subprocess.call(command, shell=True)
