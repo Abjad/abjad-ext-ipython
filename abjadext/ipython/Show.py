@@ -1,5 +1,5 @@
 import abjad
-import os
+import pathlib
 import subprocess
 import tempfile
 from IPython.core.display import display_png
@@ -20,10 +20,8 @@ class Show:
         if not hasattr(argument, '__illustrate__'):
             raise TypeError('Cannot illustrate {!r}'.format(type(argument)))
         with tempfile.TemporaryDirectory() as temporary_directory:
-            temporary_file_path = os.path.join(
-                temporary_directory,
-                'output.png',
-                )
+            temporary_directory = pathlib.Path(temporary_directory)
+            temporary_file_path = temporary_directory / 'output.png'
             result = abjad.persist(argument).as_png(temporary_file_path)
             pngs = []
             for file_path in result[0]:
@@ -33,7 +31,7 @@ class Show:
                 if exit_code:
                     message = 'ImageMagick failed: {}'.format(exit_code)
                     raise RuntimeError(message)
-                with open(file_path, 'rb') as file_pointer:
+                with open(str(file_path), 'rb') as file_pointer:
                     file_contents = file_pointer.read()
                     pngs.append(file_contents)
         for png in pngs:

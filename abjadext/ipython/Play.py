@@ -1,6 +1,6 @@
 import abjad
 import base64
-import os
+import pathlib
 import subprocess
 import tempfile
 from IPython.core.display import display_html
@@ -25,13 +25,14 @@ class Play(object):
             raise TypeError('Cannot play {!r}'.format(type(argument)))
         has_vorbis = self._check_for_vorbis()
         with tempfile.TemporaryDirectory() as temporary_directory:
-            midi_file_path = os.path.join(temporary_directory, 'out.midi')
+            temporary_directory = pathlib.Path(temporary_directory)
+            midi_file_path = temporary_directory / 'out.midi'
             result = abjad.persist(argument).as_midi(midi_file_path)
             midi_file_path, format_time, render_time = result
             if has_vorbis:
-                audio_file_path = os.path.join(temporary_directory, 'out.ogg')
+                audio_file_path = temporary_directory / 'out.ogg'
             else:
-                audio_file_path = os.path.join(temporary_directory, 'out.aif')
+                audio_file_path = temporary_directory / 'out.aif'
             encoded_audio = self._get_audio_as_base64(
                 midi_file_path,
                 audio_file_path,
@@ -86,6 +87,6 @@ class Play(object):
         return encoded_audio
 
     def _get_base64_from_file(self, file_name):
-        with open(file_name, 'rb') as file_pointer:
+        with open(str(file_name), 'rb') as file_pointer:
             data = file_pointer.read()
             return base64.b64encode(data).decode('utf-8')
