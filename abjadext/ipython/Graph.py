@@ -1,12 +1,14 @@
+import abjad
 import os
-import shutil
 import subprocess
 import tempfile
+from IPython.core.display import display_png
 
 
-class Graph(object):
-    r'''IPython replacement callable for `topleveltools.graph()`.
-    '''
+class Graph:
+    """
+    IPython replacement callable for `abjad.graph()`.
+    """
 
     ### SPECIAL METHODS ###
 
@@ -19,15 +21,9 @@ class Graph(object):
         edge_attributes=None,
         **keywords
         ):
-        r'''A replacement for Ajbad's graph function for IPython Notebook.
-        '''
-        from abjad.tools import systemtools
-        from IPython.core.display import display_png
-
         if isinstance(argument, str):
             graphviz_format = argument
-        else:
-            assert hasattr(argument, '__graph__')
+        elif hasattr(argument, '__graph__'):
             graphviz_graph = argument.__graph__(**keywords)
             if graph_attributes:
                 graphviz_graph.attributes.update(graph_attributes)
@@ -36,7 +32,8 @@ class Graph(object):
             if edge_attributes:
                 graphviz_graph.edge_attributes.update(edge_attributes)
             graphviz_format = str(graphviz_graph)
-
+        else:
+            raise TypeError('Cannot illustrate {!r}'.format(type(argument)))
         valid_layouts = (
             'circo',
             'dot',
@@ -46,32 +43,29 @@ class Graph(object):
             'sfdp',
             'twopi',
             )
-        assert layout in valid_layouts
-
-        message = 'cannot find `{}` command-line tool.'
-        message = message.format(layout)
-        message += ' Please download Graphviz from graphviz.org.'
-        assert systemtools.IOManager.find_executable(layout), message
-        assert systemtools.IOManager.find_executable('convert')
-
-        temporary_directory = tempfile.mkdtemp()
-        dot_path = os.path.join(temporary_directory, 'graph.dot')
-        pdf_path = os.path.join(temporary_directory, 'graph.pdf')
-        png_path = os.path.join(temporary_directory, 'graph.png')
-
-        with open(dot_path, 'w') as file_pointer:
-            file_pointer.write(graphviz_format)
-
-        command = '{} -v -Tpdf {} -o {}'
-        command = command.format(layout, dot_path, pdf_path)
-        subprocess.call(command, shell=True)
-
-        command = 'convert {} -trim {}'
-        command = command.format(pdf_path, png_path)
-        subprocess.call(command, shell=True)
-
-        systemtools.IOManager.spawn_subprocess(command)
-        with open(png_path, 'rb') as file_pointer:
-            png = file_pointer.read()
-        shutil.rmtree(temporary_directory)
+        if layout not in valid_layouts:
+            raise ValueError('Invalid layout: {}'.format(layout))
+        if not abjad.IOManager.find_executable(layout):
+            raise RuntimeError('Cannot find Graphviz.')
+        if not abjad.IOManager.find_executable('convert'):
+            raise RuntimeError('Cannot find ImageMagick.')
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            dot_path = os.path.join(temporary_directory, 'graph.dot')
+            pdf_path = os.path.join(temporary_directory, 'graph.pdf')
+            png_path = os.path.join(temporary_directory, 'graph.png')
+            with open(dot_path, 'w') as file_pointer:
+                file_pointer.write(graphviz_format)
+            command = '{} -v -Tpdf {} -o {}'
+            command = command.format(layout, dot_path, pdf_path)
+            exit_code = subprocess.call(command, shell=True)
+            if exit_code:
+                raise RuntimeError('Graphviz failed.')
+            command = 'convert {} -trim {}'
+            command = command.format(pdf_path, png_path)
+            exit_code = subprocess.call(command, shell=True)
+            if exit_code:
+                raise RuntimeError('ImageMagick failed.')
+            abjad.IOManager.spawn_subprocess(command)
+            with open(png_path, 'rb') as file_pointer:
+                png = file_pointer.read()
         display_png(png, raw=True)
