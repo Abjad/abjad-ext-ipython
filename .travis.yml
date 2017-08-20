@@ -17,6 +17,7 @@ addons:
     - ghostscript
     - graphviz
     - imagemagick
+    - timidity
 
 before_install:
 - wget -q http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-$LILYPOND_VERSION-1.linux-64.sh
