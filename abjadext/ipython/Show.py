@@ -22,7 +22,7 @@ class Show:
         with tempfile.TemporaryDirectory() as temporary_directory:
             temporary_directory = pathlib.Path(temporary_directory)
             temporary_file_path = temporary_directory / 'output.png'
-            result = abjad.persist(argument).as_png(temporary_file_path)
+            result = abjad.persist(argument).as_png(str(temporary_file_path))
             pngs = []
             for file_path in result[0]:
                 command = 'convert {file_path} -trim {file_path}'
