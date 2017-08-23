@@ -25,7 +25,32 @@ def test_success():
 
 
 def test_multipage_success():
-    pass
+    staff = abjad.Staff("c'1 d'1 e'1 f'1")
+    for leaf in staff[:-1]:
+        abjad.attach(abjad.PageBreak(), leaf)
+    assert format(staff) == abjad.String.normalize(r'''
+        \new Staff {
+            c'1
+            \pageBreak
+            d'1
+            \pageBreak
+            e'1
+            \pageBreak
+            f'1
+        }
+    ''')
+    show = abjadext.ipython.Show()
+    with unittest.mock.patch('IPython.core.display.display_png') as display_mock:
+        with unittest.mock.patch.object(
+            show, '_run_imagemagick',
+            wraps=show._run_imagemagick,
+            ) as convert_mock:
+            show(staff)
+    assert convert_mock.call_count == 4
+    assert display_mock.call_count == 4
+    png_path = pathlib.Path(convert_mock.call_args_list[0][0][0])
+    assert not png_path.exists()
+    assert not png_path.parent.exists()
 
 
 def test_no_illustrate_method():
@@ -131,3 +156,12 @@ def test_no_imagemagick_output():
     """
     Show will fail if ImageMagick output disappears.
     """
+    def side_effect(png_path):
+        pathlib.Path(png_path).unlink()
+        return 0
+    staff = abjad.Staff("c'4 d'4 e'4 f'4")
+    show = abjadext.ipython.Show()
+    with unittest.mock.patch('abjadext.ipython.Show._run_imagemagick') as mock:
+        mock.side_effect = side_effect
+        with pytest.raises(FileNotFoundError):
+            show(staff)
