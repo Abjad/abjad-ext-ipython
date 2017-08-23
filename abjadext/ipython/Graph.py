@@ -45,7 +45,7 @@ class Graph:
                 graphviz_graph.edge_attributes.update(edge_attributes)
             graphviz_format = str(graphviz_graph)
         else:
-            raise TypeError('Cannot illustrate {!r}'.format(type(argument)))
+            raise TypeError('Cannot graph {!r}'.format(type(argument)))
         if layout not in self._valid_layouts:
             raise ValueError('Invalid layout: {}'.format(layout))
         if not abjad.IOManager.find_executable(layout):

@@ -65,7 +65,7 @@ def test_no_illustrate_method():
         show(foo)
 
 
-def test_illustrate_fails():
+def test_illustrate_failed():
     """
     Exceptions during illustration propagate out.
     """
