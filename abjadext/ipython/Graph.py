@@ -63,6 +63,8 @@ class Graph:
             if exit_code:
                 message = 'Graphviz failed: {}'.format(exit_code)
                 raise RuntimeError(message)
+            if not pdf_path.exists():
+                raise FileNotFoundError(str(pdf_path))
             exit_code = self._run_imagemagick(pdf_path, png_path)
             if exit_code:
                 message = 'ImageMagick failed: {}'.format(exit_code)

@@ -26,7 +26,7 @@ class Show:
             pngs = []
             png_paths = result[0]
             if not png_paths:
-                raise RuntimeError('LilyPond PNG output failed.')
+                raise FileNotFoundError('LilyPond PNG output not found.')
             for png_path in png_paths:
                 exit_code = self._run_imagemagick(png_path)
                 if exit_code:

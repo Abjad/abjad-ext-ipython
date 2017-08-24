@@ -84,9 +84,7 @@ def test_lilypond_not_found():
     Show will fail if LilyPond cannot be found.
     """
     def side_effect(name):
-        if name == 'lilypond':
-            return False
-        return True
+        return False
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     show = abjadext.ipython.Show()
     with unittest.mock.patch('abjad.systemtools.IOManager.find_executable') as mock:
@@ -134,9 +132,8 @@ def test_no_lilypond_output():
     show = abjadext.ipython.Show()
     with unittest.mock.patch('abjad.agenttools.PersistenceAgent.as_png') as mock:
         mock.return_value = ((), 0.0, 0.0, True)
-        with pytest.raises(RuntimeError) as excinfo:
+        with pytest.raises(FileNotFoundError):
             show(staff)
-        assert 'LilyPond PNG output failed.' in str(excinfo.value)
 
 
 def test_imagemagick_failed():
