@@ -66,27 +66,27 @@ class Play(object):
 
     def _get_audio_as_base64(
         self,
-        midi_file_path,
-        audio_file_path,
+        midi_path,
+        audio_path,
         has_vorbis,
         ):
         if has_vorbis:
             output_flag = '-Ov'
         else:
             output_flag = '-Oa'
-        command = 'timidity {midi_file_path} {output_flag} -o {audio_file_path}'.format(
-            midi_file_path=midi_file_path,
-            output_flag=output_flag,
-            audio_file_path=audio_file_path,
-            )
-        exit_code = subprocess.call(command, shell=True)
+        exit_code = self._run_timidity(midi_path, audio_path, output_flag)
         if exit_code:
             message = 'Timidity failed: {}'.format(exit_code)
             raise RuntimeError(message)
-        encoded_audio = self._get_base64_from_file(audio_file_path)
-        return encoded_audio
-
-    def _get_base64_from_file(self, file_name):
-        with open(str(file_name), 'rb') as file_pointer:
+        with audio_path.open('rb') as file_pointer:
             data = file_pointer.read()
-            return base64.b64encode(data).decode('utf-8')
+        return base64.b64encode(data).decode('utf-8')
+
+    def _run_timidity(self, midi_path, audio_path, output_flag):
+        command = 'timidity {midi_path} {output_flag} -o {audio_path}'
+        command = command.format(
+            midi_path=midi_path,
+            output_flag=output_flag,
+            audio_path=audio_path,
+            )
+        return subprocess.call(command, shell=True)

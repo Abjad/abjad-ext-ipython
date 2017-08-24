@@ -38,6 +38,8 @@ class Show:
         for png in pngs:
             IPython.core.display.display_png(png, raw=True)
 
+    ### PRIVATE METHODS ###
+
     def _run_imagemagick(self, png_path):
         command = 'convert {png_path} -trim {png_path}'
         command = command.format(png_path=png_path)
