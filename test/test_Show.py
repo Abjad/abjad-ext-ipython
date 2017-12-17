@@ -117,7 +117,7 @@ def test_lilypond_failed():
     """
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     show = abjadext.ipython.Show()
-    with unittest.mock.patch('abjad.agenttools.PersistenceAgent.as_png') as mock:
+    with unittest.mock.patch('abjad.systemtools.PersistenceManager.as_png') as mock:
         mock.side_effect = RuntimeError('Who knew?')
         with pytest.raises(RuntimeError) as excinfo:
             show(staff)
@@ -130,7 +130,7 @@ def test_no_lilypond_output():
     """
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     show = abjadext.ipython.Show()
-    with unittest.mock.patch('abjad.agenttools.PersistenceAgent.as_png') as mock:
+    with unittest.mock.patch('abjad.systemtools.PersistenceManager.as_png') as mock:
         mock.return_value = ((), 0.0, 0.0, True)
         with pytest.raises(FileNotFoundError):
             show(staff)
