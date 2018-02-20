@@ -7,8 +7,6 @@ env:
   - LILYPOND_VERSION=2.19.65
 
 python:
-- 3.4
-- 3.5
 - 3.6
 
 addons:
