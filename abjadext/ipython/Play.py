@@ -14,7 +14,7 @@ class Play(object):
     using `timidity`, and displays the resulting audio as an <audio> tag.
     """
 
-    ### SPECIAL METHODS ###
+    # ### SPECIAL METHODS ### #
 
     def __call__(self, argument):
         if not abjad.IOManager.find_executable('lilypond'):
@@ -41,7 +41,7 @@ class Play(object):
         if encoded_audio is not None:
             self._display_audio_tag(encoded_audio, has_vorbis)
 
-    ### PRIVATE METHODS ###
+    # ### PRIVATE METHODS ### #
 
     def _check_for_vorbis(self):
         has_vorbis = False
@@ -69,7 +69,7 @@ class Play(object):
         midi_path,
         audio_path,
         has_vorbis,
-        ):
+    ):
         if has_vorbis:
             output_flag = '-Ov'
         else:

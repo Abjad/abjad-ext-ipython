@@ -15,7 +15,7 @@ def test_success():
         with unittest.mock.patch.object(
             show, '_run_imagemagick',
             wraps=show._run_imagemagick,
-            ) as convert_mock:
+        ) as convert_mock:
             show(staff)
     assert convert_mock.call_count == 1
     assert display_mock.call_count == 1
@@ -29,7 +29,8 @@ def test_multipage_success():
     for leaf in staff[:-1]:
         abjad.attach(abjad.PageBreak(), leaf)
     assert format(staff) == abjad.String.normalize(r'''
-        \new Staff {
+        \new Staff
+        {
             c'1
             \pageBreak
             d'1

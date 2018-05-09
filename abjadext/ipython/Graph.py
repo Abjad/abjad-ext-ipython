@@ -10,7 +10,7 @@ class Graph:
     IPython replacement callable for `abjad.graph()`.
     """
 
-    ### CLASS VARIABLES ###
+    # ### CLASS VARIABLES ### #
 
     _valid_layouts = (
         'circo',
@@ -22,7 +22,7 @@ class Graph:
         'twopi',
         )
 
-    ### SPECIAL METHODS ###
+    # ### SPECIAL METHODS ### #
 
     def __call__(
         self,
@@ -32,7 +32,7 @@ class Graph:
         node_attributes=None,
         edge_attributes=None,
         **keywords
-        ):
+    ):
         if isinstance(argument, str):
             graphviz_format = argument
         elif hasattr(argument, '__graph__'):
@@ -73,7 +73,7 @@ class Graph:
                 png = file_pointer.read()
         IPython.core.display.display_png(png, raw=True)
 
-    ### PRIVATE METHODS ###
+    # ### PRIVATE METHODS ### #
 
     def _run_graphviz(self, layout, dot_path, pdf_path):
         command = '{} -v -Tpdf {} -o {}'

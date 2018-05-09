@@ -10,7 +10,7 @@ class Show:
     IPython replacement callable for `abjad.show()`.
     """
 
-    ### SPECIAL METHODS ###
+    # ### SPECIAL METHODS ### #
 
     def __call__(self, argument):
         if not hasattr(argument, '__illustrate__'):
@@ -38,7 +38,7 @@ class Show:
         for png in pngs:
             IPython.core.display.display_png(png, raw=True)
 
-    ### PRIVATE METHODS ###
+    # ### PRIVATE METHODS ### #
 
     def _run_imagemagick(self, png_path):
         command = 'convert {png_path} -trim {png_path}'
