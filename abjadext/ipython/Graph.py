@@ -1,8 +1,10 @@
 import abjad
+import copy
 import pathlib
 import subprocess
 import tempfile
-import IPython.core.display
+import uqbar.graphs
+import IPython.core.display  # type: ignore
 
 
 class Graph:
@@ -35,23 +37,28 @@ class Graph:
     ):
         if isinstance(argument, str):
             graphviz_format = argument
-        elif hasattr(argument, '__graph__'):
-            graphviz_graph = argument.__graph__(**keywords)
+        else:
+            if hasattr(argument, '__graph__'):
+                graphviz_graph = argument.__graph__(**keywords)
+            elif isinstance(argument, uqbar.graphs.Graph):
+                graphviz_graph = copy.deepcopy(argument)
+            else:
+                raise TypeError('Cannot graph {!r}'.format(type(argument)))
             if graph_attributes:
                 graphviz_graph.attributes.update(graph_attributes)
             if node_attributes:
                 graphviz_graph.node_attributes.update(node_attributes)
             if edge_attributes:
                 graphviz_graph.edge_attributes.update(edge_attributes)
-            graphviz_format = str(graphviz_graph)
-        else:
-            raise TypeError('Cannot graph {!r}'.format(type(argument)))
+            graphviz_format = format(graphviz_graph, 'graphviz')
+
         if layout not in self._valid_layouts:
             raise ValueError('Invalid layout: {}'.format(layout))
         if not abjad.IOManager.find_executable(layout):
             raise RuntimeError('Cannot find Graphviz.')
         if not abjad.IOManager.find_executable('convert'):
             raise RuntimeError('Cannot find ImageMagick.')
+
         with tempfile.TemporaryDirectory() as temporary_directory:
             temporary_directory = pathlib.Path(temporary_directory)
             dot_path = temporary_directory / 'graph.dot'
@@ -71,6 +78,7 @@ class Graph:
                 raise RuntimeError(message)
             with open(str(png_path), 'rb') as file_pointer:
                 png = file_pointer.read()
+
         IPython.core.display.display_png(png, raw=True)
 
     # ### PRIVATE METHODS ### #

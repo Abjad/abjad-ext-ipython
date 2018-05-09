@@ -2,7 +2,7 @@ import abjad
 import pathlib
 import subprocess
 import tempfile
-import IPython.core.display
+import IPython.core.display  # type: ignore
 
 
 class Show:

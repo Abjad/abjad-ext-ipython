@@ -3,7 +3,7 @@ import base64
 import pathlib
 import subprocess
 import tempfile
-import IPython.core.display
+import IPython.core.display  # type: ignore
 
 
 class Play(object):
