@@ -38,3 +38,7 @@ script:
 - pytest
 - jupyter nbconvert --to=html --ExecutePreprocessor.enabled=True test/test.ipynb
 - mypy abjadext/
+
+after_success:
+- pip install coveralls
+- coveralls
