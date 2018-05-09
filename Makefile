@@ -1,5 +1,3 @@
-.PHONY: docs build
-
 build:
 	python setup.py sdist
 
@@ -9,9 +7,6 @@ clean:
 	find . -name __pycache__ | xargs rm -Rif
 	rm -Rif dist/
 	rm -Rif build/
-
-docs:
-	make -C docs/ html
 
 release:
 	make clean
