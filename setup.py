@@ -21,7 +21,7 @@ if __name__ == '__main__':
         author='Josiah Wolf Oberholtzer',
         author_email='josiah.oberholtzer@gmail.com',
         classifiers=[
-            'Development Status :: 5 - Production/Stable',
+            'Development Status :: 3 - Alpha',
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Programming Language :: Python :: 3.6',
             'Programming Language :: Python :: Implementation :: CPython',
@@ -54,5 +54,5 @@ if __name__ == '__main__':
         packages=['abjadext'],
         platforms='Any',
         url='http://www.projectabjad.org',
-        version=read_version(),
+        version=read_version() + 'alpha0',
     )
