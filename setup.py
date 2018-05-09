@@ -8,7 +8,7 @@ subpackage_name = 'ipython'
 
 def read_version():
     root_path = pathlib.Path(__file__).parent
-    version_path = root_path / 'abjadext' / subpackage_name / 'version.py'
+    version_path = root_path / 'abjadext' / subpackage_name / '_version.py'
     with version_path.open() as file_pointer:
         file_contents = file_pointer.read()
     local_dict = {}
@@ -28,10 +28,11 @@ if __name__ == '__main__':
             'Topic :: Artistic Software',
             ],
         extras_require={
-            'development': [
+            'test': [
                 'mypy',
                 'pytest-helpers-namespace',
                 'pytest>=3.5.0',
+                'pytest-cov',
                 ],
             },
         include_package_data=True,
@@ -54,5 +55,5 @@ if __name__ == '__main__':
         packages=['abjadext'],
         platforms='Any',
         url='http://www.projectabjad.org',
-        version=read_version() + 'alpha0',
+        version=read_version(),
     )
