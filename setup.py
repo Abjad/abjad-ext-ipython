@@ -39,7 +39,7 @@ if __name__ == '__main__':
         install_requires=[
             'abjad >= 2.21',
             'jupyter >= 1.0.0',
-            'uqbar >= 0.2.11',
+            'uqbar >= 0.2.12',
             ],
         license='MIT',
         long_description=pathlib.Path('README.md').read_text(),
