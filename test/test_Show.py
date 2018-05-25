@@ -27,7 +27,7 @@ def test_success():
 def test_multipage_success():
     staff = abjad.Staff("c'1 d'1 e'1 f'1")
     for leaf in staff[:-1]:
-        abjad.attach(abjad.PageBreak(), leaf)
+        abjad.attach(abjad.LilyPondLiteral(r'\pageBreak', 'after'), leaf)
     assert format(staff) == abjad.String.normalize(r'''
         \new Staff
         {
