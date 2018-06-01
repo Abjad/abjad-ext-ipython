@@ -1,3 +1,6 @@
+import abjad
+
+
 def load_ipython_extension(ipython):
     '''
     Integrates audio and visual rendering of Abjad scores in IPython notebooks.
@@ -20,17 +23,16 @@ def load_ipython_extension(ipython):
         %load_ext abjadext.ipython
 
     '''
-    import abjad
-    from abjadext import ipython as abjad_ipython
-    play = abjad_ipython.Play()
-    show = abjad_ipython.Show()
-    graph = abjad_ipython.Graph()
+    import abjadext.ipython
+    play = abjadext.ipython.Play()
+    show = abjadext.ipython.Show()
+    graph = abjadext.ipython.Graph()
     abjad.play = play
     abjad.show = show
     abjad.graph = graph
-    abjad.topleveltools.play = play
-    abjad.topleveltools.show = show
-    abjad.topleveltools.graph = graph
+    abjad.top.play = play
+    abjad.top.show = show
+    abjad.top.graph = graph
     names = {
         'play': play,
         'show': show,

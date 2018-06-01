@@ -69,7 +69,7 @@ def test_graphviz_not_found():
         return False
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     graph = abjadext.ipython.Graph()
-    with unittest.mock.patch('abjad.systemtools.IOManager.find_executable') as mock:
+    with unittest.mock.patch('abjad.system.IOManager.find_executable') as mock:
         mock.side_effect = side_effect
         with pytest.raises(RuntimeError) as excinfo:
             graph(staff)
@@ -86,7 +86,7 @@ def test_imagemagick_not_found():
         return True
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     graph = abjadext.ipython.Graph()
-    with unittest.mock.patch('abjad.systemtools.IOManager.find_executable') as mock:
+    with unittest.mock.patch('abjad.system.IOManager.find_executable') as mock:
         mock.side_effect = side_effect
         with pytest.raises(RuntimeError) as excinfo:
             graph(staff)
