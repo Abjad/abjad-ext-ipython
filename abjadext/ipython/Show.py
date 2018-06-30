@@ -22,9 +22,11 @@ class Show:
         with tempfile.TemporaryDirectory() as temporary_directory:
             temporary_directory = pathlib.Path(temporary_directory)
             temporary_file_path = temporary_directory / 'output.png'
-            result = abjad.persist(argument).as_png(str(temporary_file_path))
+            png_paths, _, _, success = abjad.persist(argument).as_png(
+                str(temporary_file_path))
             pngs = []
-            png_paths = result[0]
+            if not success:
+                raise RuntimeError('Rendering failed')
             if not png_paths:
                 raise FileNotFoundError('LilyPond PNG output not found.')
             for png_path in png_paths:

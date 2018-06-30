@@ -27,8 +27,10 @@ class Play(object):
         with tempfile.TemporaryDirectory() as temporary_directory:
             temporary_directory = pathlib.Path(temporary_directory)
             midi_file_path = temporary_directory / 'out.midi'
-            result = abjad.persist(argument).as_midi(str(midi_file_path))
-            midi_file_path, format_time, render_time = result
+            midi_file_path, _, _, success = abjad.persist(argument).as_midi(
+                str(midi_file_path))
+            if not success:
+                raise RuntimeError('Rendering failed')
             if has_vorbis:
                 audio_file_path = temporary_directory / 'out.ogg'
             else:
