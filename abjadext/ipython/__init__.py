@@ -1,3 +1,6 @@
+"""
+Abjad's IPython extension.
+"""
 from .Graph import Graph  # noqa
 from .Play import Play  # noqa
 from .Show import Show  # noqa
