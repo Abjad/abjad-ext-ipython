@@ -29,6 +29,7 @@ if __name__ == "__main__":
         ],
         extras_require={
             "test": [
+                "black",
                 "flake8",
                 "isort",
                 "mypy >= 0.660",
@@ -37,7 +38,7 @@ if __name__ == "__main__":
             ]
         },
         include_package_data=True,
-        install_requires=["abjad >= 2.21", "jupyter >= 1.0.0", "uqbar >= 0.2.12"],
+        install_requires=["abjad >= 2.21", "jupyter >= 1.0.0", "uqbar >= 0.3.1"],
         license="MIT",
         long_description=pathlib.Path("README.md").read_text(),
         keywords=", ".join(
