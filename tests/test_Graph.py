@@ -7,7 +7,6 @@ import pytest
 import abjadext.ipython
 
 
-@pytest.mark.skip("This will be replaced by uqbar.ext.ipython")
 def test_success():
     """
     Graph can process graphable objects.
