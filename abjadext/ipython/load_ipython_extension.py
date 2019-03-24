@@ -2,7 +2,7 @@ import abjad
 
 
 def load_ipython_extension(ipython):
-    '''
+    """
     Integrates audio and visual rendering of Abjad scores in IPython notebooks.
 
     This extension requires `timidity` be in your $PATH. If you do not have
@@ -22,8 +22,9 @@ def load_ipython_extension(ipython):
 
         %load_ext abjadext.ipython
 
-    '''
+    """
     import abjadext.ipython
+
     play = abjadext.ipython.Play()
     show = abjadext.ipython.Show()
     graph = abjadext.ipython.Graph()
@@ -33,9 +34,5 @@ def load_ipython_extension(ipython):
     abjad.top.play = play
     abjad.top.show = show
     abjad.top.graph = graph
-    names = {
-        'play': play,
-        'show': show,
-        'graph': graph,
-        }
+    names = {"play": play, "show": show, "graph": graph}
     ipython.push(names)

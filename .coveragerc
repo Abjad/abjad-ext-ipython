@@ -1,0 +1,9 @@
+[run]
+branch = True
+cover_pylib = False
+source =
+    abjadext/
+
+[report]
+exclude_lines = 
+    raise NotImplementedError
