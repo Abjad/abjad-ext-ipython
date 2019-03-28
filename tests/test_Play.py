@@ -1,8 +1,10 @@
-import abjad
-import abjadext.ipython
 import pathlib
-import pytest
 import unittest.mock
+
+import abjad
+import pytest
+
+import abjadext.ipython
 
 
 def test_success():
@@ -11,11 +13,10 @@ def test_success():
     """
     staff = abjad.Staff("c'4 d'4 e'4 f'4")
     play = abjadext.ipython.Play()
-    with unittest.mock.patch('IPython.core.display.display_html') as display_mock:
+    with unittest.mock.patch("IPython.core.display.display_html") as display_mock:
         with unittest.mock.patch.object(
-            play, '_run_timidity',
-            wraps=play._run_timidity,
-            ) as timidity_mock:
+            play, "_run_timidity", wraps=play._run_timidity
+        ) as timidity_mock:
             play(staff)
     assert timidity_mock.call_count == 1
     assert display_mock.call_count == 1
@@ -28,8 +29,10 @@ def test_no_illustrate_method():
     """
     Argument must be illustrable.
     """
+
     class Foo:
         pass
+
     foo = Foo()
     graph = abjadext.ipython.Graph()
     with pytest.raises(TypeError):
