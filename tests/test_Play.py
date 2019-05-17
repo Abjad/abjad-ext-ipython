@@ -7,7 +7,7 @@ import pytest
 import abjadext.ipython
 
 
-@pytest.mark.skip('Not cross-platform: timidity not installed under OSX.')
+@pytest.mark.skip("Not cross-platform: timidity not installed under OSX.")
 def test_success():
     """
     Play can process illustrable objects.
