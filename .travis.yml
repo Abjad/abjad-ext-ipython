@@ -34,8 +34,9 @@ install:
 - pip install -e .[test]
 
 script:
-- black --version
-- make black-check
+# TODO: make black work on Travis:
+#- black --version
+#- make black-check
 - make flake8
 - mypy --version
 - if [[ $TRAVIS_PYTHON_VERSION != 3.6 ]]; then make mypy; fi
