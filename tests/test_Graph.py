@@ -1,9 +1,9 @@
 import pathlib
 import unittest.mock
 
-import abjad
 import pytest
 
+import abjad
 import abjadext.ipython
 
 

@@ -3,10 +3,10 @@ import pathlib
 import subprocess
 import tempfile
 
-import abjad
-import IPython.core.display  # type: ignore
-
 import uqbar.graphs
+
+import IPython.core.display  # type: ignore
+import abjad
 
 
 class Graph:

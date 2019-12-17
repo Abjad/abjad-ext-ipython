@@ -2,8 +2,8 @@ import pathlib
 import subprocess
 import tempfile
 
-import abjad
 import IPython.core.display  # type: ignore
+import abjad
 
 
 class Show:
