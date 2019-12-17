@@ -2,14 +2,19 @@ language: python
 dist: xenial
 sudo: false
 python:
-- 3.6
-- 3.7
-- 3.8
+    - 3.6
+    - 3.7
+    - 3.8
 
 env:
   global:
+<<<<<<< HEAD
   - LILYPOND_URL="http://lilypond.org/downloads/binaries/linux-64/"
   - LILYPOND_VERSION=2.19.83
+=======
+    - LILYPOND_URL=http://lilypond.org/downloads/binaries/linux-64/
+    - LILYPOND_VERSION=2.19.65
+>>>>>>> 6b54092ac4043f09664aaa20638c4b705eee8df1
 
 addons:
   apt:
@@ -46,5 +51,5 @@ script:
 - make jupyter-test
 
 after_success:
-- pip install --quiet coveralls
-- coveralls
+    - pip install --quiet coveralls
+    - coveralls
