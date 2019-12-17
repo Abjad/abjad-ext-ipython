@@ -35,10 +35,11 @@ if __name__ == "__main__":
                 "mypy >= 0.660",
                 "pytest >= 4.1.0",
                 "pytest-cov >= 2.6.0",
+                "pytest-helpers-namespace",
             ]
         },
         include_package_data=True,
-        install_requires=["abjad >= 2.21", "jupyter >= 1.0.0", "uqbar >= 0.3.1"],
+        install_requires=["abjad >= 3.0", "jupyter >= 1.0.0"],
         license="MIT",
         long_description=pathlib.Path("README.md").read_text(),
         keywords=", ".join(
