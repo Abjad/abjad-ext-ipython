@@ -42,7 +42,6 @@ script:
 - make black-check
 - make flake8
 - if [[ $TRAVIS_PYTHON_VERSION != 3.6 ]]; then make mypy; fi
-- make pytest
 - make jupyter-test
 
 after_success:
