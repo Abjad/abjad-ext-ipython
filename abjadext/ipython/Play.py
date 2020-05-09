@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 
 import IPython.core.display  # type: ignore
+
 import abjad
 
 
