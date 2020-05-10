@@ -1,3 +1,5 @@
+import subprocess
+
 from abjad.iox import AbjadGrapher, Illustrator, Player
 
 
@@ -28,7 +30,17 @@ def load_ipython_extension(ipython):
     patch_show(ipython)
 
 
-def display_svg(ipython, output_path):
+def display_audio(midi_path):
+    from IPython.core.display import display
+    from IPython.display import Audio
+
+    audio_path = midi_path.with_suffix(".ogg")
+    command = f"timidity {midi_path} -Ov -o {audio_path}"
+    subprocess.run(command, shell=True, check=True)
+    display(Audio(filename=str(audio_path)))
+
+
+def display_svg(output_path):
     from IPython.core.display import display_svg
 
     with output_path.open() as file_pointer:
@@ -41,7 +53,7 @@ def patch_graph(ipython):
         return "svg"
 
     def open_output_path(self, output_path):
-        display_svg(ipython, output_path)
+        display_svg(output_path)
 
     AbjadGrapher.get_format = get_format
     AbjadGrapher.open_output_path = open_output_path
@@ -49,7 +61,7 @@ def patch_graph(ipython):
 
 def patch_play(ipython):
     def open_output_path(self, output_path):
-        pass
+        display_audio(output_path)
 
     Player.open_output_path = open_output_path
 
@@ -61,7 +73,7 @@ def patch_show(ipython):
                 yield path
 
     def open_output_path(self, output_path):
-        display_svg(ipython, output_path)
+        display_svg(output_path)
 
     def get_render_command(self, input_path, lilypond_path):
         parts = [
