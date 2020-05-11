@@ -1,4 +1,5 @@
-.PHONY: docs build
+.PHONY: docs build help
+.DEFAULT_GOAL := help
 
 project = abjadext
 errors = E123,E203,E265,E266,E501,W503
@@ -6,33 +7,36 @@ origin := $(shell git config --get remote.origin.url)
 formatPaths = ${project}/ tests/ *.py
 testPaths = ${project}/ tests/
 
+help:  ## Display this help
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
 black-check:
 	black --target-version py36 --exclude '.*boilerplate.*' --check --diff ${formatPaths}
 
 black-reformat:
 	black --target-version py36 --exclude '.*boilerplate.*' ${formatPaths}
 
-build:
+build:  ## Build distribution archive
 	python setup.py sdist
 
-clean:
+clean:  ## Remove transitory files
 	find . -name '*.pyc' | xargs rm
+	find . -name __pycache__ | xargs rm -Rf
 	rm -Rif *.egg-info/
 	rm -Rif .cache/
 	rm -Rif .tox/
-	rm -Rif __pycache__
 	rm -Rif build/
 	rm -Rif dist/
 	rm -Rif htmlcov/
 	rm -Rif prof/
 
-docs:
+docs:  ## Build the docs
 	make -C docs/ html
 
-flake8:
+flake8:  ## Run flake8
 	flake8 --max-line-length=90 --isolated --ignore=${errors} ${formatPaths}
 
-gh-pages:
+gh-pages:  ## Upload docs to GitHub pages
 	rm -Rf gh-pages/
 	git clone $(origin) gh-pages/
 	cd gh-pages/ && \
@@ -45,7 +49,7 @@ gh-pages:
 		git push -u origin gh-pages
 	rm -Rf gh-pages/
 
-isort:
+isort:  ## Run isort
 	isort \
 		--case-sensitive \
 		--multi-line 3 \
@@ -60,10 +64,10 @@ isort:
 jupyter-test:
 	jupyter nbconvert --to=html --ExecutePreprocessor.enabled=True tests/test.ipynb
 
-mypy:
+mypy:  ## Run mypy
 	mypy --ignore-missing-imports ${project}/
 
-pytest:
+pytest:  ## Run pytest
 	rm -Rf htmlcov/
 	pytest \
 		--cov-config=.coveragerc \
@@ -73,7 +77,7 @@ pytest:
 		--durations=20 \
 		${testPaths}
 
-pytest-x:
+pytest-x:  ## Run pytest and stop on first failure
 	rm -Rf htmlcov/
 	pytest \
 		-x \
@@ -84,19 +88,11 @@ pytest-x:
 		--durations=20 \
 		${testPaths}
 
-reformat:
-	make isort
-	make black-reformat
+reformat: isort black-reformat ## Reformat codebase via isort and black
 
-release:
-	make docs
-	make clean
-	make build
+release: docs clean build ## Make a new release
+	pip install -U twine
 	twine upload dist/*.tar.gz
 	make gh-pages
 
-test:
-	make black-check
-	make flake8
-	make mypy
-	make pytest
+test: black-check flake8 mypy pytest ## Run all tests

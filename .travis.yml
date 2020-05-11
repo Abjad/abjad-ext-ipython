@@ -2,14 +2,12 @@ language: python
 dist: xenial
 sudo: false
 python:
-- 3.6
-- 3.7
 - 3.8
 
 env:
   global:
   - LILYPOND_URL="http://lilypond.org/downloads/binaries/linux-64/"
-  - LILYPOND_VERSION=2.19.83
+  - LILYPOND_VERSION=2.21.1
 
 addons:
   apt:
@@ -42,7 +40,6 @@ script:
 - make black-check
 - make flake8
 - if [[ $TRAVIS_PYTHON_VERSION != 3.6 ]]; then make mypy; fi
-- make pytest
 - make jupyter-test
 
 after_success:

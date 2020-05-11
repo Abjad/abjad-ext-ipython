@@ -104,3 +104,5 @@ ENV/
 
 # pytest
 .pytest_cache/
+
+test.html
