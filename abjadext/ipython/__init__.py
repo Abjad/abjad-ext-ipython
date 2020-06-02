@@ -1,5 +1,11 @@
 """
-Abjad's IPython extension.
+Abjad's IPython extension package.
 """
-from ._version import __version__, __version_info__  # noqa
-from .load_ipython_extension import load_ipython_extension  # noqa
+from ._version import __version__, __version_info__
+from .load_ipython_extension import load_ipython_extension
+
+__all__ = [
+    "__version__",
+    "__version_info__",
+    "load_ipython_extension",
+]
