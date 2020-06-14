@@ -32,14 +32,14 @@ if __name__ == "__main__":
                 "black",
                 "flake8",
                 "isort",
-                "mypy >= 0.660",
-                "pytest >= 4.1.0",
-                "pytest-cov >= 2.6.0",
+                "mypy",
+                "pytest>=5.4.3",
+                "pytest-cov",
                 "pytest-helpers-namespace",
             ]
         },
         include_package_data=True,
-        install_requires=["abjad >= 3.1", "jupyter >= 1.0.0"],
+        install_requires=["abjad>=3.1", "jupyter>=1.0.0"],
         license="MIT",
         long_description=pathlib.Path("README.md").read_text(),
         keywords=", ".join(
@@ -55,6 +55,6 @@ if __name__ == "__main__":
         name="abjad-ext-{}".format(subpackage_name),
         packages=["abjadext"],
         platforms="Any",
-        url="http://www.projectabjad.org",
+        url="http://abjad.github.io",
         version=read_version(),
     )
