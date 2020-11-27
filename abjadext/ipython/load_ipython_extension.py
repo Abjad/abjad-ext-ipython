@@ -1,6 +1,6 @@
 import subprocess
 
-from abjad.iox import AbjadGrapher, Illustrator, Player
+from abjad.io import AbjadGrapher, Illustrator, Player
 
 
 def load_ipython_extension(ipython):
