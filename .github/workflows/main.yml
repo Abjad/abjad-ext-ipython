@@ -24,15 +24,15 @@ jobs:
 
     - name: Intall apt add-ons
       run: |
-        echo; echo FREEPATS
+        # echo; echo FREEPATS
         sudo apt-get freepats
-        echo; echo GHOSTSCRIPT
+        # echo; echo GHOSTSCRIPT
         sudo apt-get ghostscript
-        echo; echo GRAPHVIZ
+        # echo; echo GRAPHVIZ
         sudo apt-get graphviz
-        echo; echo IMAGEMAGICK
+        # echo; echo IMAGEMAGICK
         sudo apt-get imagemagick
-        echo; echo TIMIDITY
+        # echo; echo TIMIDITY
         sudo apt-get timidity
 
     - name: Install LilyPond
