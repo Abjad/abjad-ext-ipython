@@ -1,5 +1,4 @@
-project = abjadext
-formatPaths = ${project}/ tests/ *.py
+.PHONY: build
 
 black-check:
 	black --check --diff --target-version=py38 .
@@ -18,7 +17,6 @@ clean:
 	rm -Rif .tox/
 	rm -Rif build/
 	rm -Rif dist/
-	rm -Rif htmlcov/
 	rm -Rif prof/
 
 flake_ignore = --ignore=E203,E266,E501,W503
@@ -37,7 +35,7 @@ isort-check:
 	--thirdparty=uqbar \
 	--trailing-comma \
 	--use-parentheses \
-	${formatPaths}
+	abjadext/ tests/ *.py
 
 isort-reformat:
 	isort \
@@ -48,22 +46,21 @@ isort-reformat:
 	--thirdparty=uqbar \
 	--trailing-comma \
 	--use-parentheses \
-	${formatPaths}
+	abjadext/ tests/ *.py
 
 jupyter-test:
 	jupyter nbconvert --to=html --ExecutePreprocessor.enabled=True tests/test.ipynb
 
 mypy:
-	mypy ${project}/
+	mypy .
 
 reformat:
 	black-reformat
 	isort-reformat
 
-release: docs clean build
+release: clean build
 	pip install -U twine
 	twine upload dist/*.tar.gz
-	make gh-pages
 
 check:
 	make black-check
