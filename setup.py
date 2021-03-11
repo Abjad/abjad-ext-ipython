@@ -27,29 +27,25 @@ if __name__ == "__main__":
             "Programming Language :: Python :: Implementation :: CPython",
             "Topic :: Artistic Software",
         ],
-        extras_require={
-            "test": [
-                "black",
-                "flake8",
-                "isort",
-                "mypy",
-                "pytest>=5.4.3",
-                "pytest-cov",
-                "pytest-helpers-namespace",
-            ]
-        },
         include_package_data=True,
-        install_requires=["abjad>=3.1", "jupyter>=1.0.0"],
+        install_requires=[
+            "abjad==3.3",
+            "black",
+            "flake8",
+            "isort",
+            "mypy",
+            "pytest>=5.4.3",
+            "pytest-helpers-namespace",
+            "jupyter>=1.0.0",
+        ],
         license="MIT",
         long_description=pathlib.Path("README.md").read_text(),
         keywords=", ".join(
             [
+                "jupyter",
+                "lilypond",
                 "music composition",
                 "music notation",
-                "formalized score control",
-                "lilypond",
-                "documentation",
-                "cli",
             ]
         ),
         name="abjad-ext-{}".format(subpackage_name),
