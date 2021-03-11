@@ -24,11 +24,11 @@ jobs:
 
     - name: Intall apt add-ons
       run: |
-        sudo apt-get freepats
-        sudo apt-get ghostscript
-        sudo apt-get graphviz
-        sudo apt-get imagemagick
-        sudo apt-get timidity
+        sudo apt-get install freepats
+        sudo apt-get install ghostscript
+        sudo apt-get install graphviz
+        sudo apt-get install imagemagick
+        sudo apt-get install timidity
 
     - name: Install LilyPond
       run: |
